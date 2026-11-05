@@ -1,0 +1,6 @@
+# Ejecutables y archivos de compilacion
+*.exe
+*.o
+
+# Configuracion del editor
+.vscode/
