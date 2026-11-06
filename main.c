@@ -17,6 +17,7 @@ static void mostrar_menu(void)
 
 int main(void)
 {
+    Mision mision = {0};
     int opcion;
     int leidos;
     int c;
@@ -36,8 +37,12 @@ int main(void)
 
         switch (opcion) {
             case 1:
-                printf("\n[Pendiente] Cargar valores por defecto.\n");
-                break;
+    mision.a1 = A1_DEFECTO;
+    mision.t1 = T1_DEFECTO;
+    mision.a2 = A2_DEFECTO;
+    mision.h  = H_DEFECTO;
+    printf("\nValores por defecto cargados.\n");
+    break;
             case 2:
                 printf("\n[Pendiente] Ingreso manual de parametros.\n");
                 break;

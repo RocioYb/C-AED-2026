@@ -11,4 +11,12 @@
 #define A2_DEFECTO    12.5      // aceleracion fase 2 [m/s^2]
 #define H_DEFECTO     160000.0  // altitud de apagado de motores [m]
 
+// Datos de entrada de la mision
+typedef struct {
+    double a1;   // aceleracion fase 1 (motores + SRB)
+    double t1;   // tiempo hasta el desacople de los SRB
+    double a2;   // aceleracion fase 2 (solo el nucleo)
+    double h;    // altitud a la que se apagan los motores
+} Mision;
+
 #endif
