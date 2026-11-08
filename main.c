@@ -20,6 +20,9 @@ int main(void)
     int opcion;
     int leidos;
     int c;
+    int parametros_cargados = 0;
+
+    ParametrosD parametros;
 
     do {
         mostrar_menu();
@@ -35,27 +38,62 @@ int main(void)
         }
 
         switch (opcion) {
+
             case 1:
-                printf("\n[Pendiente] Cargar valores por defecto.\n");
+
+                iniciar_parametros_por_defecto(&parametros);
+
+                parametros_cargados = 1;
+
+                printf("\nParametros predeterminados cargados.\n");
+
                 break;
+
             case 2:
-                printf("\n[Pendiente] Ingreso manual de parametros.\n");
+
+                if (cargar_parametros_manual(&parametros)) {
+                    parametros_cargados = 1;
+                } else {
+                    printf("\nNo se pudieron cargar los parametros.\n");
+                }
+
+                while ((c = getchar()) != '\n' && c != EOF) { }
+
                 break;
+
             case 3:
+
                 printf("\n[Pendiente] Simulacion del ascenso.\n");
+
                 break;
+
             case 4:
-                printf("\n[Pendiente] Ver parametros actuales.\n");
+
+                if (parametros_cargados) {
+                    mostrar_parametros(&parametros);
+                } else {
+                    printf("\nPrimero debe cargar los parametros.\n");
+                }
+
                 break;
+
             case 5:
+
                 printf("\n[Pendiente] Reporte de resultados.\n");
+
                 break;
+
             case 0:
+
                 printf("\nFin de la simulacion.\n");
+
                 break;
+
             default:
+
                 printf("\nOpcion invalida. Ingrese un numero del 0 al 5.\n");
         }
+
     } while (opcion != 0);
 
     return 0;

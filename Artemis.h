@@ -25,4 +25,8 @@ typedef struct {
 //  Prototipos de funciones públicas del simulador
 void iniciar_parametros_por_defecto(ParametrosD *p);
 
+int cargar_parametros_manual(ParametrosD *p);
+
+void mostrar_parametros(ParametrosD *p);
+
 #endif
