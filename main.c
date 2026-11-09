@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "Artemis.h"
 #include "validaciones.h"
+#include "simulacion.h"
 
 static void mostrar_menu(void)
 {
@@ -23,7 +24,7 @@ int main(void)
     int parametros_cargados = 0;
 
     ParametrosD p;
-    ResultadosSLS resultados;
+    ResultadosSLS r;
 
     do {
         mostrar_menu();
@@ -58,7 +59,7 @@ int main(void)
 
                 limpiar_pantalla();
                 if (parametros_cargados) {
-                    simular_vuelo(&p, &resultados);
+                    calcular_simulacion(&p, &r);
                     printf("\n Simulacion completada correctamente.\n");
                     vuelo = 1;
                 } else {
@@ -80,7 +81,7 @@ int main(void)
 
                 limpiar_pantalla();
                 if (vuelo) {
-                    imprimir_reporte(&p, &resultados);
+                    mostrar_resultados(&r);
                 } else {
                     printf("\n[Error] Primero debe ejecutar la simulacion.\n");
                 }
