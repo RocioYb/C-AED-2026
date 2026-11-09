@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include "Artemis.h"
+#include "validaciones.h"
 
 void iniciar_parametros_por_defecto(ParametrosD *p) {
     p->v0 = V0_DEFECTO;
@@ -14,6 +15,7 @@ void iniciar_parametros_por_defecto(ParametrosD *p) {
 int cargar_parametros_manual(ParametrosD *p) {
 
     ParametrosD nuevos;
+    int c;
 
     printf("\n--- INGRESO DE PARAMETROS ---\n");
 
@@ -38,14 +40,10 @@ int cargar_parametros_manual(ParametrosD *p) {
     printf("Gravedad terrestre (m/s2): ");
     if (scanf("%lf", &nuevos.g) != 1) return 0;
 
-    // Validaciones basicas
-    if (nuevos.v0 < 0 || nuevos.y0 < 0 ||
-        nuevos.a1 <= 0 || nuevos.t1 <= 0 ||
-        nuevos.a2 <= 0 || nuevos.h <= nuevos.y0 ||
-        nuevos.g <= 0) {
+    while ((c = getchar()) != '\n' && c != EOF);
 
-        printf("\nError: se ingresaron valores fuera de rango.\n");
-        return 0;
+    if (!validar_parametros_fisicos(&nuevos)) {
+        return 0; 
     }
 
     // Guardar los valores solamente si son validos
