@@ -3,7 +3,7 @@
 #define ARTEMIS_H
 
 //Constantes del escenario
-#define G_TERRESTRE   9.81      // gravedad [m/s^2]
+#define G_TERRESTRE   9.80      // gravedad [m/s^2]
 #define V0_DEFECTO    0.0       // velocidad inicial [m/s]
 #define Y0_DEFECTO    0.0       // altitud inicial [m]
 #define A1_DEFECTO    20.0      // aceleracion fase 1 [m/s^2]
@@ -11,12 +11,22 @@
 #define A2_DEFECTO    12.5      // aceleracion fase 2 [m/s^2]
 #define H_DEFECTO     160000.0  // altitud de apagado de motores [m]
 
-// Datos de entrada de la mision
+// Registro para almacenar los parámetros de entrada
 typedef struct {
-    double a1;   // aceleracion fase 1 (motores + SRB)
-    double t1;   // tiempo hasta el desacople de los SRB
-    double a2;   // aceleracion fase 2 (solo el nucleo)
-    double h;    // altitud a la que se apagan los motores
-} Mision;
+    double v0;       // Velocidad inicial (m/s)
+    double y0;       // Altura inicial en plataforma (m)
+    double a1;       // Aceleración en Fase 1  (m/s^2)
+    double t1;       // Tiempo de desacople (s)
+    double a2;       // Aceleración en Fase 2 (m/s^2)
+    double h; // Altura de apagado de motores (m)
+    double g;        // gravedad (m/s^2)
+} ParametrosD;
+
+//  Prototipos de funciones públicas del simulador
+void iniciar_parametros_por_defecto(ParametrosD *p);
+
+int cargar_parametros_manual(ParametrosD *p);
+
+void mostrar_parametros(ParametrosD *p);
 
 #endif

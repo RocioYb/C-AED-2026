@@ -1,5 +1,7 @@
 #include <stdio.h>
 #include "Artemis.h"
+#include "validaciones.h"
+#include "simulacion.h"
 
 static void mostrar_menu(void)
 {
@@ -17,50 +19,86 @@ static void mostrar_menu(void)
 
 int main(void)
 {
-    Mision mision = {0};
     int opcion;
-    int leidos;
-    int c;
+    int vuelo = 0;
+    int parametros_cargados = 0;
+
+    ParametrosD p;
+    ResultadosSLS r;
 
     do {
         mostrar_menu();
         printf("Elija una opcion: ");
-
-        leidos = scanf("%d", &opcion);
-        if (leidos == EOF) {
-            opcion = 0;
-        } else {
-            while ((c = getchar()) != '\n' && c != EOF) { }  /* limpiar */
-            if (leidos != 1)
-                opcion = -1;
-        }
+        opcion_menu(&opcion);
 
         switch (opcion) {
+
             case 1:
-    mision.a1 = A1_DEFECTO;
-    mision.t1 = T1_DEFECTO;
-    mision.a2 = A2_DEFECTO;
-    mision.h  = H_DEFECTO;
-    printf("\nValores por defecto cargados.\n");
-    break;
+                limpiar_pantalla();
+                iniciar_parametros_por_defecto(&p);
+                parametros_cargados = 1;
+                vuelo = 0;
+                printf("\nParametros predeterminados cargados.\n");
+                pausar_consola();
+                break;
+
             case 2:
-                printf("\n[Pendiente] Ingreso manual de parametros.\n");
+
+                limpiar_pantalla();
+                if (cargar_parametros_manual(&p)) {
+                    parametros_cargados = 1;
+                    vuelo = 0;
+                } else {
+                    printf("\n Paramentros incorrectos. No se pudieron cargar los parametros.\n");
+                }
+
+                pausar_consola();
                 break;
+
             case 3:
-                printf("\n[Pendiente] Simulacion del ascenso.\n");
+
+                limpiar_pantalla();
+                if (parametros_cargados) {
+                    calcular_simulacion(&p, &r);
+                    printf("\n Simulacion completada correctamente.\n");
+                    vuelo = 1;
+                } else {
+                    printf("\n[Error] Primero debe cargar los parametros de la mision.\n");
+                }
                 break;
+            
             case 4:
-                printf("\n[Pendiente] Ver parametros actuales.\n");
+                limpiar_pantalla();
+                if (parametros_cargados) {
+                    mostrar_parametros(&p);
+                } else {
+                    printf("\nPrimero debe cargar los parametros.\n");
+                }
+
                 break;
+
             case 5:
-                printf("\n[Pendiente] Reporte de resultados.\n");
+
+                limpiar_pantalla();
+                if (vuelo) {
+                    mostrar_resultados(&r);
+                } else {
+                    printf("\n[Error] Primero debe ejecutar la simulacion.\n");
+                }
+
                 break;
             case 0:
+
                 printf("\nFin de la simulacion.\n");
+
                 break;
+
             default:
+
                 printf("\nOpcion invalida. Ingrese un numero del 0 al 5.\n");
+                pausar_consola();
         }
+
     } while (opcion != 0);
 
     return 0;
