@@ -55,17 +55,17 @@ int main(void)
                 break;
 
             case 3:
-
-                limpiar_pantalla();
-                if (parametros_cargados) {
-                    calcular_simulacion(&p, &r);
-                    printf("\n Simulacion completada correctamente.\n");
-                    vuelo = 1;
-                } else {
-                    printf("\n[Error] Primero debe cargar los parametros de la mision.\n");
-                }
-                break;
-            
+    limpiar_pantalla();
+    if (!parametros_cargados) {
+        printf("\n[Error] Primero debe cargar los parametros de la mision.\n");
+    } else if (calcular_simulacion(&p, &r)) {
+        printf("\n Simulacion completada correctamente.\n");
+        vuelo = 1;
+    } else {
+        vuelo = 0;
+        printf("\n[Error] No se pudo simular: la altura de apagado debe superar la altura de desacople.\n");
+    }
+    break;
             case 4:
                 limpiar_pantalla();
                 if (parametros_cargados) {
