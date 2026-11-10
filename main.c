@@ -25,10 +25,6 @@ int main(void)
 
     ParametrosD p;
     ResultadosSimulacion r;
-<<<<<<< HEAD
-
-=======
->>>>>>> 14067f23cd3b738bcceee7eecc1828ec88487ce8
     do {
         mostrar_menu();
         printf("Elija una opcion: ");
