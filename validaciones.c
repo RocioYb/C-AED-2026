@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "validaciones.h"
 
 void limpiar_pantalla(void) {

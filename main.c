@@ -24,8 +24,7 @@ int main(void)
     int parametros_cargados = 0;
 
     ParametrosD p;
-    ResultadosSLS r;
-
+    ResultadosSimulacion r;
     do {
         mostrar_menu();
         printf("Elija una opcion: ");
