@@ -48,13 +48,21 @@ gcc main.c Artemis.c simulacion.c validaciones.c -o artemis -lm
 
 ---
 
-##  Uso de inteligencia Artificial 
+Uso de inteligencia artificial
 
+Durante el desarrollo del proyecto se utilizaron herramientas de inteligencia artificial como apoyo para el aprendizaje y la programación en lenguaje C.
 
-Durante el desarrollo del proyecto se utilizó ChatGPT como herramienta de apoyo para el aprendizaje de sintaxis de lenguaje C y la programación.
-Herramienta utilizada: ChatGPT, de OpenAI.
-Claude, de Anthropic
-Organizar un programa en C y generacion de la estructura básica del programa
-Solucionar errores de compilación y enlazado.
-Asistencia en la depuración de funciones y revisión de la organización modular.
-Orientación para diseñar casos de prueba y mejorar las validaciones.
+Herramientas utilizadas:
+
+- ChatGPT, de OpenAI.
+- Claude, de Anthropic.
+
+Actividades en las que se utilizaron:
+
+- Organización de la estructura básica del programa en C.
+- Consulta sobre sintaxis y conceptos del lenguaje.
+- Resolución de errores de compilación y enlazado.
+- Asistencia en la depuración de funciones y revisión de la organización modular.
+- Orientación para diseñar casos de prueba y mejorar las validaciones.
+
+Las sugerencias proporcionadas por estas herramientas fueron utilizadas como apoyo y revisadas por los integrantes del grupo durante el desarrollo del proyecto.
