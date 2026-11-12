@@ -36,18 +36,6 @@ El programa está diseñado para dar respuesta analítica y numérica a las sigu
 
 ---
 
-##  Requisitos y Compilación
-
-Para compilar y ejecutar este proyecto desde la terminal, asegúrese de tener instalado un compilador de C (como MinGW).
-
-### 1. Compilación y ejecución
-```bash
-gcc main.c Artemis.c simulacion.c validaciones.c -o artemis -lm
-
-./artemis
-
----
-
 Uso de inteligencia artificial
 
 Durante el desarrollo del proyecto se utilizaron herramientas de inteligencia artificial como apoyo para el aprendizaje y la programación en lenguaje C.
@@ -66,3 +54,16 @@ Actividades en las que se utilizaron:
 - Orientación para diseñar casos de prueba y mejorar las validaciones.
 
 Las sugerencias proporcionadas por estas herramientas fueron utilizadas como apoyo y revisadas por los integrantes del grupo durante el desarrollo del proyecto.
+
+##  Requisitos y Compilación
+
+Para compilar y ejecutar este proyecto desde la terminal, asegúrese de tener instalado un compilador de C (como MinGW).
+
+### 1. Compilación y ejecución
+```bash
+gcc main.c Artemis.c simulacion.c validaciones.c -o artemis -lm
+
+./artemis
+
+---
+
