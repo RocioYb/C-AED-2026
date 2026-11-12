@@ -45,3 +45,14 @@ Para compilar y ejecutar este proyecto desde la terminal, asegúrese de tener in
 gcc main.c Artemis.c simulacion.c validaciones.c -o artemis -lm
 
 ./artemis
+
+
+## Uso de inteligencia artificial generativa
+
+Durante el desarrollo del proyecto se utilizó ChatGPT como herramienta de apoyo para el aprendizaje de sintaxis de lenguaje C y la programación.
+Herramienta utilizada: ChatGPT, de OpenAI.
+Claude, de Anthropic
+Organizar un programa en C y generacion de la estructura básica del programa
+Solucionar errores de compilación y enlazado.
+Asistencia en la depuración de funciones y revisión de la organización modular.
+Orientación para diseñar casos de prueba y mejorar las validaciones.
