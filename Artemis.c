@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include "Artemis.h"
 #include "validaciones.h"
+#include "simulacion.h"
+
+#define ALTURA_MAXIMA 1000000.0   /* limite superior para la altura de apagado [m] */
 
 void iniciar_parametros_por_defecto(ParametrosD *p) {
     p->v0 = V0_DEFECTO;
@@ -15,32 +18,32 @@ void iniciar_parametros_por_defecto(ParametrosD *p) {
 int cargar_parametros_manual(ParametrosD *p) {
 
     ParametrosD nuevos;
-    int c;
+    double altura_desacople;
 
     printf("\n--- INGRESO DE PARAMETROS ---\n");
 
-    printf("Velocidad inicial (m/s): ");
-    if (scanf("%lf", &nuevos.v0) != 1) return 0;
+    if (!leer_double("Velocidad inicial (m/s)",   0.0, 1000.0,   &nuevos.v0)) return 0;
 
-    printf("Altura inicial (m): ");
-    if (scanf("%lf", &nuevos.y0) != 1) return 0;
+    if (!leer_double("Altura inicial (m)",        0.0, 10000.0, &nuevos.y0)) return 0;
 
-    printf("Aceleracion fase 1 (m/s2): ");
-    if (scanf("%lf", &nuevos.a1) != 1) return 0;
+    if (!leer_double("Aceleracion fase 1 (m/s2)", 0.1, 100.0, &nuevos.a1)) return 0;
 
-    printf("Tiempo de desacople (s): ");
-    if (scanf("%lf", &nuevos.t1) != 1) return 0;
+    if (!leer_double("Tiempo de desacople (s)",   1.0, 600.0, &nuevos.t1)) return 0;
 
-    printf("Aceleracion fase 2 (m/s2): ");
-    if (scanf("%lf", &nuevos.a2) != 1) return 0;
+    if (!leer_double("Aceleracion fase 2 (m/s2)", 0.1, 100.0, &nuevos.a2)) return 0;
 
-    printf("Altura de apagado (m): ");
-    if (scanf("%lf", &nuevos.h) != 1) return 0;
-
+    /* La altura de apagado tiene que superar la altura ya recorrida en la fase 1 */
+     altura_desacople = nuevos.y0 + nuevos.v0 * nuevos.t1
+                     + (nuevos.a1 * nuevos.t1 * nuevos.t1) / 2.0;
+    if (altura_desacople + 1.0 > ALTURA_MAXIMA) {
+         printf("\n  [Error de Rango] Con esa a1 y ese t1 el desacople ya supera los %.0f m.\n", ALTURA_MAXIMA);
+        return 0;
+    }
+    printf("(Altura al desacople con estos datos: %.2f m)\n", altura_desacople);
+    if (!leer_double("Altura de apagado (m)", altura_desacople + 1.0, ALTURA_MAXIMA, &nuevos.h)) return 0;
     printf("Gravedad terrestre (m/s2): ");
-    if (scanf("%lf", &nuevos.g) != 1) return 0;
-
-    while ((c = getchar()) != '\n' && c != EOF);
+    
+    if (!leer_double("Gravedad terrestre (m/s2)", 1.0, 20.0, &nuevos.g)) return 0;
 
     if (!validar_parametros_fisicos(&nuevos)) {
         return 0; 
