@@ -46,8 +46,10 @@ gcc main.c Artemis.c simulacion.c validaciones.c -o artemis -lm
 
 ./artemis
 
+---
 
-## Uso de inteligencia artificial generativa
+##  Uso de inteligencia Artificial 
+
 
 Durante el desarrollo del proyecto se utilizó ChatGPT como herramienta de apoyo para el aprendizaje de sintaxis de lenguaje C y la programación.
 Herramienta utilizada: ChatGPT, de OpenAI.
