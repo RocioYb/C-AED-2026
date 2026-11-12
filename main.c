@@ -13,6 +13,7 @@ static void mostrar_menu(void)
     printf(" 3. Ejecutar simulacion\n");
     printf(" 4. Ver parametros actuales\n");
     printf(" 5. Ver resultados / reporte\n");
+    printf(" 6. Ver historial de simulaciones\n");
     printf(" 0. Salir\n");
     printf("------------------------------------------\n");
 }
@@ -25,6 +26,8 @@ int main(void)
 
     ParametrosD p;
     ResultadosSimulacion r;
+    RegistroSimulacion historial[MAX_HISTORIAL];
+    int cantidad_historial = 0;
     do {
         mostrar_menu();
         printf("Elija una opcion: ");
@@ -61,6 +64,11 @@ int main(void)
     } else if (calcular_simulacion(&p, &r)) {
         printf("\n Simulacion completada correctamente.\n");
         vuelo = 1;
+        if (agregar_al_historial(historial, &cantidad_historial, &p, &r)) {
+            printf(" Intento Nro %d guardado en el historial.\n", cantidad_historial);
+        } else {
+            printf(" [Aviso] Historial lleno (%d intentos): este intento no se guardo.\n", MAX_HISTORIAL);
+        }
     } else {
         vuelo = 0;
         printf("\n[Error] No se pudo simular: la altura de apagado debe superar la altura de desacople.\n");
@@ -86,6 +94,10 @@ int main(void)
                 }
 
                 break;
+            case 6:
+              limpiar_pantalla();
+                mostrar_historial(historial, cantidad_historial);
+                break;
             case 0:
 
                 printf("\nFin de la simulacion.\n");
@@ -94,7 +106,7 @@ int main(void)
 
             default:
 
-                printf("\nOpcion invalida. Ingrese un numero del 0 al 5.\n");
+                printf("\nOpcion invalida. Ingrese un numero del 0 al 6.\n");
                 pausar_consola();
         }
 

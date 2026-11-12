@@ -61,3 +61,50 @@ void mostrar_resultados(ResultadosSimulacion *r)
     printf("Aceleracion de la fase 1: %.2f g\n", r->aceleracion_g);
     printf("=================================================\n");
 }
+
+int agregar_al_historial(RegistroSimulacion historial[], int *cantidad,
+                         const ParametrosD *p, const ResultadosSimulacion *r)
+{
+    if (historial == NULL || cantidad == NULL || p == NULL || r == NULL) {
+        return 0;
+    }
+
+    if (*cantidad >= MAX_HISTORIAL) {
+        return 0;   /* historial lleno */
+    }
+
+    historial[*cantidad].parametros = *p;
+    historial[*cantidad].resultados = *r;
+    (*cantidad)++;
+
+    return 1;
+}
+
+void mostrar_historial(const RegistroSimulacion historial[], int cantidad)
+{
+    int i;
+
+    if (cantidad <= 0) {
+        printf("\nTodavia no hay simulaciones en el historial.\n");
+        return;
+    }
+
+    printf("\n=================== HISTORIAL DE SIMULACIONES ===================\n");
+    printf("Nro |   a1  |   t1  |   a2  | h apag [m] | v2 [m/s] | h max [m] |   g\n");
+    printf("----+-------+-------+-------+------------+----------+-----------+------\n");
+
+    for (i = 0; i < cantidad; i++) {
+        printf(" %2d | %5.1f | %5.1f | %5.1f | %10.0f | %8.1f | %9.0f | %4.2f\n",
+               i + 1,
+               historial[i].parametros.a1,
+               historial[i].parametros.t1,
+               historial[i].parametros.a2,
+               historial[i].parametros.h,
+               historial[i].resultados.velocidad_apagado,
+               historial[i].resultados.altura_maxima,
+               historial[i].resultados.aceleracion_g);
+    }
+
+    printf("=================================================================\n");
+    printf("Intentos guardados: %d de %d\n", cantidad, MAX_HISTORIAL);
+}
