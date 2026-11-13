@@ -3,6 +3,7 @@
 #include "Artemis.h"
 
 int opcion_menu(int *opcion);
+int leer_double_seguro(const char *mensaje, double *valor);
 int validar_parametros_fisicos(const ParametrosD *p);
 void pausar_consola(void);
 void limpiar_pantalla(void);

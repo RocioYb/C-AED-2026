@@ -1,6 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "validaciones.h"
+#include <string.h>
+#include <ctype.h>
+#include <errno.h>
+#include <math.h>
 
 void limpiar_pantalla(void) {
   #ifdef _WIN32
@@ -36,6 +40,68 @@ int opcion_menu(int *opcion) {
     }
     return 1; 
 }
+
+
+int leer_double_seguro(const char *mensaje, double *valor) {
+
+    char entrada[100];
+    char *fin;
+    double numero;
+
+    if (valor == NULL) {
+        return 0;
+    }
+
+    while (1) {
+
+        printf("%s", mensaje);
+
+        if (fgets(entrada, sizeof(entrada), stdin) == NULL) {
+            return 0;
+        }
+
+        // Detectar entradas demasiado largas
+        if (strchr(entrada, '\n') == NULL && !feof(stdin)) {
+
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF);
+
+            printf("[Error] Entrada demasiado larga.\n");
+            continue;
+        }
+
+        errno = 0;
+
+        // Convertir texto a numero
+        numero = strtod(entrada, &fin);
+
+        if (fin == entrada) {
+            printf("[Error] Debe ingresar un numero.\n");
+            continue;
+        }
+
+        // Ignorar espacios al final
+        while (isspace((unsigned char)*fin)) {
+            fin++;
+        }
+
+        // Rechazar caracteres adicionales
+        if (*fin != '\0') {
+            printf("[Error] Entrada numerica invalida.\n");
+            continue;
+        }
+
+        // Rechazar NaN, infinito y desbordamientos
+        if (errno == ERANGE || !isfinite(numero)) {
+            printf("[Error] El numero debe ser finito y valido.\n");
+            continue;
+        }
+
+        *valor = numero;
+        return 1;
+    }
+}
+
 
 int validar_parametros_fisicos(const ParametrosD *p) {
     // Calculamos la altura a la que ocurre el desacople para verificar 'h' correctamente

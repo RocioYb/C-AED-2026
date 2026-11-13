@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "Artemis.h"
 #include "validaciones.h"
+#include <math.h>
 
 void iniciar_parametros_por_defecto(ParametrosD *p) {
     p->v0 = V0_DEFECTO;
@@ -12,124 +13,108 @@ void iniciar_parametros_por_defecto(ParametrosD *p) {
     p->g  = G_TERRESTRE;
 }
 
+
 int cargar_parametros_manual(ParametrosD *p) {
 
     ParametrosD nuevos;
-    int c;
+
+    if (p == NULL) {
+        return 0;
+    }
 
     printf("\n--- INGRESO DE PARAMETROS ---\n");
 
     // 1. Velocidad inicial
-    printf("Velocidad inicial (m/s): ");
-    if (scanf("%lf", &nuevos.v0) != 1) {
-        while ((c = getchar()) != '\n' && c != EOF);
-        printf("\n[Error] Entrada invalida.\n");
+    if (!leer_double_seguro("Velocidad inicial (m/s): ", &nuevos.v0))
         return 0;
-    }
+
     if (nuevos.v0 < 0) {
-        while ((c = getchar()) != '\n' && c != EOF);
         printf("\n[Error] La velocidad inicial no puede ser negativa.\n");
         return 0;
     }
 
     // 2. Altura inicial
-    printf("Altura inicial (m): ");
-    if (scanf("%lf", &nuevos.y0) != 1) {
-        while ((c = getchar()) != '\n' && c != EOF);
-        printf("\n[Error] Entrada invalida.\n");
+    if (!leer_double_seguro("Altura inicial (m): ", &nuevos.y0))
         return 0;
-    }
+
     if (nuevos.y0 < 0) {
-        while ((c = getchar()) != '\n' && c != EOF);
         printf("\n[Error] La altura inicial no puede ser negativa.\n");
         return 0;
     }
 
     // 3. Aceleracion fase 1
-    printf("Aceleracion fase 1 (m/s2): ");
-    if (scanf("%lf", &nuevos.a1) != 1) {
-        while ((c = getchar()) != '\n' && c != EOF);
-        printf("\n[Error] Entrada invalida.\n");
+    if (!leer_double_seguro("Aceleracion fase 1 (m/s2): ", &nuevos.a1))
         return 0;
-    }
+
     if (nuevos.a1 <= 0) {
-        while ((c = getchar()) != '\n' && c != EOF);
         printf("\n[Error] La aceleracion de la fase 1 debe ser mayor a 0.\n");
         return 0;
     }
 
     // 4. Tiempo de desacople
-    printf("Tiempo de desacople (s): ");
-    if (scanf("%lf", &nuevos.t1) != 1) {
-        while ((c = getchar()) != '\n' && c != EOF);
-        printf("\n[Error] Entrada invalida.\n");
+    if (!leer_double_seguro("Tiempo de desacople (s): ", &nuevos.t1))
         return 0;
-    }
+
     if (nuevos.t1 <= 0) {
-        while ((c = getchar()) != '\n' && c != EOF);
         printf("\n[Error] El tiempo de desacople debe ser mayor a 0.\n");
         return 0;
     }
 
     // 5. Aceleracion fase 2
-    printf("Aceleracion fase 2 (m/s2): ");
-    if (scanf("%lf", &nuevos.a2) != 1) {
-        while ((c = getchar()) != '\n' && c != EOF);
-        printf("\n[Error] Entrada invalida.\n");
+    if (!leer_double_seguro("Aceleracion fase 2 (m/s2): ", &nuevos.a2))
         return 0;
-    }
+
     if (nuevos.a2 <= 0) {
-        while ((c = getchar()) != '\n' && c != EOF);
         printf("\n[Error] La aceleracion de la fase 2 debe ser mayor a 0.\n");
         return 0;
     }
 
-    // Calculamos la altura de desacople automáticamente
-    double altura_desacople = nuevos.y0 + (nuevos.v0 * nuevos.t1) + (0.5 * nuevos.a1 * nuevos.t1 * nuevos.t1);
+    // Calcular altura de desacople
+    double altura_desacople =
+        nuevos.y0 + nuevos.v0 * nuevos.t1 +
+        (nuevos.a1 * nuevos.t1 * nuevos.t1) / 2.0;
 
-    // 6. Altura de apagado con reintento inteligente
+    // 6. Altura de apagado
     int h_valido = 0;
+
     do {
-        printf("\n[Info] Altura estimada de desacople: %.2f m\n", altura_desacople);
-        printf("Altura de apagado (m): ");
-        
-        if (scanf("%lf", &nuevos.h) != 1) {
-            while ((c = getchar()) != '\n' && c != EOF);
-            printf("[Error] Entrada invalida. Intente de nuevo.\n");
-            continue;
-        }
+        printf("\n[Info] Altura estimada de desacople: %.2f m\n",
+               altura_desacople);
+
+        if (!leer_double_seguro("Altura de apagado (m): ", &nuevos.h))
+            return 0;
 
         if (nuevos.h <= altura_desacople) {
-            while ((c = getchar()) != '\n' && c != EOF);
-            printf("[Error] Demasiado baja. Debe ser mayor a la altura de desacople (%.2f m).\n", altura_desacople);
+            printf("[Error] La altura debe ser mayor a %.2f m.\n",
+                   altura_desacople);
         } else {
-            h_valido = 1; // ¡Valor correcto, salimos del bucle!
+            h_valido = 1;
         }
+
     } while (!h_valido);
 
     // 7. Gravedad terrestre
-    printf("Gravedad terrestre (m/s2): ");
-    if (scanf("%lf", &nuevos.g) != 1) {
-        while ((c = getchar()) != '\n' && c != EOF);
-        printf("\n[Error] Entrada invalida.\n");
+    if (!leer_double_seguro("Gravedad terrestre (m/s2): ", &nuevos.g))
         return 0;
-    }
+
     if (nuevos.g <= 0) {
-        while ((c = getchar()) != '\n' && c != EOF);
         printf("\n[Error] La gravedad debe ser mayor a 0.\n");
         return 0;
     }
 
-    // Limpiar el búfer al finalizar con éxito todo el proceso
-    while ((c = getchar()) != '\n' && c != EOF);
+    // Conservar la validacion fisica general existente
+    if (!validar_parametros_fisicos(&nuevos)) {
+        return 0;
+    }
 
-    // Guardar los valores solamente si pasaron todas las pruebas paso a paso
+    // Guardar los parametros
     *p = nuevos;
 
     printf("\nParametros cargados correctamente.\n");
 
     return 1;
 }
+
 
 void mostrar_parametros(ParametrosD *p) {
 
