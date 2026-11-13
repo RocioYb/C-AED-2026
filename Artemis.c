@@ -1,9 +1,7 @@
 #include <stdio.h>
 #include "Artemis.h"
 #include "validaciones.h"
-#include "simulacion.h"
-
-#define ALTURA_MAXIMA 1000000.0   /* limite superior para la altura de apagado [m] */
+#include <math.h>
 
 void iniciar_parametros_por_defecto(ParametrosD *p) {
     p->v0 = V0_DEFECTO;
@@ -15,47 +13,108 @@ void iniciar_parametros_por_defecto(ParametrosD *p) {
     p->g  = G_TERRESTRE;
 }
 
+
 int cargar_parametros_manual(ParametrosD *p) {
 
     ParametrosD nuevos;
-    double altura_desacople;
+
+    if (p == NULL) {
+        return 0;
+    }
 
     printf("\n--- INGRESO DE PARAMETROS ---\n");
 
-    if (!leer_double("Velocidad inicial (m/s)",   0.0, 1000.0,   &nuevos.v0)) return 0;
+    // 1. Velocidad inicial
+    if (!leer_double_seguro("Velocidad inicial (m/s): ", &nuevos.v0))
+        return 0;
 
-    if (!leer_double("Altura inicial (m)",        0.0, 10000.0, &nuevos.y0)) return 0;
-
-    if (!leer_double("Aceleracion fase 1 (m/s2)", 0.1, 100.0, &nuevos.a1)) return 0;
-
-    if (!leer_double("Tiempo de desacople (s)",   1.0, 600.0, &nuevos.t1)) return 0;
-
-    if (!leer_double("Aceleracion fase 2 (m/s2)", 0.1, 100.0, &nuevos.a2)) return 0;
-
-    /* La altura de apagado tiene que superar la altura ya recorrida en la fase 1 */
-     altura_desacople = nuevos.y0 + nuevos.v0 * nuevos.t1
-                     + (nuevos.a1 * nuevos.t1 * nuevos.t1) / 2.0;
-    if (altura_desacople + 1.0 > ALTURA_MAXIMA) {
-         printf("\n  [Error de Rango] Con esa a1 y ese t1 el desacople ya supera los %.0f m.\n", ALTURA_MAXIMA);
+    if (nuevos.v0 < 0) {
+        printf("\n[Error] La velocidad inicial no puede ser negativa.\n");
         return 0;
     }
-    printf("(Altura al desacople con estos datos: %.2f m)\n", altura_desacople);
-    if (!leer_double("Altura de apagado (m)", altura_desacople + 1.0, ALTURA_MAXIMA, &nuevos.h)) return 0;
-    printf("Gravedad terrestre (m/s2): ");
-    
-    if (!leer_double("Gravedad terrestre (m/s2)", 1.0, 20.0, &nuevos.g)) return 0;
 
-    if (!validar_parametros_fisicos(&nuevos)) {
-        return 0; 
+    // 2. Altura inicial
+    if (!leer_double_seguro("Altura inicial (m): ", &nuevos.y0))
+        return 0;
+
+    if (nuevos.y0 < 0) {
+        printf("\n[Error] La altura inicial no puede ser negativa.\n");
+        return 0;
     }
 
-    // Guardar los valores solamente si son validos
+    // 3. Aceleracion fase 1
+    if (!leer_double_seguro("Aceleracion fase 1 (m/s2): ", &nuevos.a1))
+        return 0;
+
+    if (nuevos.a1 <= 0) {
+        printf("\n[Error] La aceleracion de la fase 1 debe ser mayor a 0.\n");
+        return 0;
+    }
+
+    // 4. Tiempo de desacople
+    if (!leer_double_seguro("Tiempo de desacople (s): ", &nuevos.t1))
+        return 0;
+
+    if (nuevos.t1 <= 0) {
+        printf("\n[Error] El tiempo de desacople debe ser mayor a 0.\n");
+        return 0;
+    }
+
+    // 5. Aceleracion fase 2
+    if (!leer_double_seguro("Aceleracion fase 2 (m/s2): ", &nuevos.a2))
+        return 0;
+
+    if (nuevos.a2 <= 0) {
+        printf("\n[Error] La aceleracion de la fase 2 debe ser mayor a 0.\n");
+        return 0;
+    }
+
+    // Calcular altura de desacople
+    double altura_desacople =
+        nuevos.y0 + nuevos.v0 * nuevos.t1 +
+        (nuevos.a1 * nuevos.t1 * nuevos.t1) / 2.0;
+
+    // 6. Altura de apagado
+    int h_valido = 0;
+
+    do {
+        printf("\n[Info] Altura estimada de desacople: %.2f m\n",
+               altura_desacople);
+
+        if (!leer_double_seguro("Altura de apagado (m): ", &nuevos.h))
+            return 0;
+
+        if (nuevos.h <= altura_desacople) {
+            printf("[Error] La altura debe ser mayor a %.2f m.\n",
+                   altura_desacople);
+        } else {
+            h_valido = 1;
+        }
+
+    } while (!h_valido);
+
+    // 7. Gravedad terrestre
+    if (!leer_double_seguro("Gravedad terrestre (m/s2): ", &nuevos.g))
+        return 0;
+
+    if (nuevos.g <= 0) {
+        printf("\n[Error] La gravedad debe ser mayor a 0.\n");
+        return 0;
+    }
+
+    // Conservar la validacion fisica general existente
+    if (!validar_parametros_fisicos(&nuevos)) {
+        return 0;
+    }
+
+    // Guardar los parametros
     *p = nuevos;
 
     printf("\nParametros cargados correctamente.\n");
 
     return 1;
 }
+
 
 void mostrar_parametros(ParametrosD *p) {
 

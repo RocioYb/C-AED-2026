@@ -1,10 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
-#include <errno.h>
-#include <ctype.h>
-#define TAM_LINEA 100
 #include "validaciones.h"
+#include <string.h>
+#include <ctype.h>
+#include <errno.h>
+#include <math.h>
 
 void limpiar_pantalla(void) {
   #ifdef _WIN32
@@ -41,69 +41,99 @@ int opcion_menu(int *opcion) {
     return 1; 
 }
 
-int validar_parametros_fisicos(const ParametrosD *p) {
-    if (p->v0 < 0 || p->y0 < 0 ||
-        p->a1 <= 0 || p->t1 <= 0 ||
-        p->a2 <= 0 || p->h <= p->y0 ||
-        p->g <= 0) {
-        
-        printf("\n  [Error de Rango] Se ingresaron valores fisicos invalidos o incoherentes.\n");
-        return 0; 
-    }
-    return 1;
-}
-/* Pide un numero decimal y repite la pregunta hasta que sea valido y este
-   entre min y max, devuelve 1 si se cargo el dato y 0 si se cerro la entrada. */
-int leer_double(const char *mensaje, double min, double max, double *destino) {
-    char linea[TAM_LINEA];
+
+int leer_double_seguro(const char *mensaje, double *valor) {
+
+    char entrada[100];
     char *fin;
-    char *c;
-    double valor;
-    int ch;
+    double numero;
+
+    if (valor == NULL) {
+        return 0;
+    }
 
     while (1) {
-        printf("%s [%.2f a %.2f]: ", mensaje, min, max);
 
-        if (fgets(linea, TAM_LINEA, stdin) == NULL) {
-            return 0;   /* se cerro la entrada */
+        printf("%s", mensaje);
+
+        if (fgets(entrada, sizeof(entrada), stdin) == NULL) {
+            return 0;
         }
 
-        if (strchr(linea, '\n') == NULL && !feof(stdin)) {  /* linea demasiado larga */
-            while ((ch = getchar()) != '\n' && ch != EOF) { }
-            printf("  [Error] Entrada demasiado larga. Intente de nuevo.\n");
+        // Detectar entradas demasiado largas
+        if (strchr(entrada, '\n') == NULL && !feof(stdin)) {
+
+            int c;
+            while ((c = getchar()) != '\n' && c != EOF);
+
+            printf("[Error] Entrada demasiado larga.\n");
             continue;
-        }
-
-        /* aceptar coma decimal (12,5) ademas de punto (12.5) */
-        for (c = linea; *c != '\0'; c++) {
-            if (*c == ',') {
-                *c = '.';
-            }
         }
 
         errno = 0;
-        valor = strtod(linea, &fin);
 
-        if (fin == linea) {
-            printf("  [Error] Debe ingresar un numero (sin letras).\n");
+        // Convertir texto a numero
+        numero = strtod(entrada, &fin);
+
+        if (fin == entrada) {
+            printf("[Error] Debe ingresar un numero.\n");
             continue;
         }
 
+        // Ignorar espacios al final
         while (isspace((unsigned char)*fin)) {
             fin++;
         }
+
+        // Rechazar caracteres adicionales
         if (*fin != '\0') {
-            printf("  [Error] Hay caracteres no validos despues del numero.\n");
+            printf("[Error] Entrada numerica invalida.\n");
             continue;
         }
 
-        /* la forma !(a && b) tambien rechaza nan e inf */
-        if (errno == ERANGE || !(valor >= min && valor <= max)) {
-            printf("  [Error] Valor fuera de rango. Debe estar entre %.2f y %.2f.\n", min, max);
+        // Rechazar NaN, infinito y desbordamientos
+        if (errno == ERANGE || !isfinite(numero)) {
+            printf("[Error] El numero debe ser finito y valido.\n");
             continue;
         }
 
-        *destino = valor;
+        *valor = numero;
         return 1;
     }
+}
+
+
+int validar_parametros_fisicos(const ParametrosD *p) {
+    // Calculamos la altura a la que ocurre el desacople para verificar 'h' correctamente
+    double altura_desacople = p->y0 + p->v0 * p->t1 + (p->a1 * p->t1 * p->t1) / 2.0;
+
+    if (p->v0 < 0) {
+        printf("\n[Error] La velocidad inicial no puede ser negativa.\n");
+        return 0;
+    }
+    if (p->y0 < 0) {
+        printf("\n[Error] La altura inicial no puede ser negativa.\n");
+        return 0;
+    }
+    if (p->a1 <= 0) {
+        printf("\n[Error] La aceleracion de la fase 1 debe ser mayor a 0.\n");
+        return 0;
+    }
+    if (p->t1 <= 0) {
+        printf("\n[Error] El tiempo de desacople debe ser mayor a 0.\n");
+        return 0;
+    }
+    if (p->a2 <= 0) {
+        printf("\n[Error] La aceleracion de la fase 2 debe ser mayor a 0.\n");
+        return 0;
+    }
+    if (p->h <= altura_desacople) {
+        printf("\n[Error] La altura de apagado debe ser mayor que la altura de desacople (%.2f m).\n", altura_desacople);
+        return 0;
+    }
+    if (p->g <= 0) {
+        printf("\n[Error] La gravedad debe ser mayor a 0.\n");
+        return 0;
+    }
+    return 1;
 }

@@ -36,6 +36,25 @@ El programa está diseñado para dar respuesta analítica y numérica a las sigu
 
 ---
 
+Uso de inteligencia artificial
+
+Durante el desarrollo del proyecto se utilizaron herramientas de inteligencia artificial como apoyo para el aprendizaje y la programación en lenguaje C.
+
+Herramientas utilizadas:
+
+- ChatGPT, de OpenAI.
+- Claude, de Anthropic.
+
+Actividades en las que se utilizaron:
+
+- Organización de la estructura básica del programa en C.
+- Consulta sobre sintaxis y conceptos del lenguaje.
+- Resolución de errores de compilación y enlazado.
+- Asistencia en la depuración de funciones y revisión de la organización modular.
+- Orientación para diseñar casos de prueba y mejorar las validaciones.
+
+Las sugerencias proporcionadas por estas herramientas fueron utilizadas como apoyo y revisadas por los integrantes del grupo durante el desarrollo del proyecto.
+
 ##  Requisitos y Compilación
 
 Para compilar y ejecutar este proyecto desde la terminal, asegúrese de tener instalado un compilador de C (como MinGW).
@@ -45,3 +64,6 @@ Para compilar y ejecutar este proyecto desde la terminal, asegúrese de tener in
 gcc main.c Artemis.c simulacion.c validaciones.c -o artemis -lm
 
 ./artemis
+
+---
+
