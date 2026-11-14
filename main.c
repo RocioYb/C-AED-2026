@@ -19,6 +19,47 @@ static void mostrar_menu(void)
     printf("------------------------------------------\n");
 }
 
+static void menu_mision(RegistroSimulacion historial[], int *cantidad)
+{
+    int opcion;
+
+    do {
+        printf("\n==========================================\n");
+        printf("               MODO MISION\n");
+        printf("==========================================\n");
+        printf(" 1. Reglas\n");
+        printf(" 2. Jugar\n");
+        printf(" 3. Ver resultados\n");
+        printf(" 0. Volver al menu principal\n");
+        printf("------------------------------------------\n");
+        printf("Elija una opcion: ");
+        opcion_menu(&opcion);
+
+        switch (opcion) {
+            case 1:
+                limpiar_pantalla();
+                mostrar_reglas();
+                pausar_consola();
+                break;
+            case 2:
+                limpiar_pantalla();
+                jugar_mision(historial, cantidad);
+                pausar_consola();
+                break;
+            case 3:
+                limpiar_pantalla();
+                mostrar_historial(historial, *cantidad, ORIGEN_MISION);
+                pausar_consola();
+                break;
+            case 0:
+                break;
+            default:
+                printf("\nOpcion invalida. Ingrese un numero del 0 al 3.\n");
+                pausar_consola();
+        }
+    } while (opcion != 0);
+}
+
 int main(void)
 {
     int opcion;
@@ -65,7 +106,7 @@ int main(void)
     } else if (calcular_simulacion(&p, &r)) {
         printf("\n Simulacion completada correctamente.\n");
         vuelo = 1;
-        if (agregar_al_historial(historial, &cantidad_historial, &p, &r)) {
+        if (agregar_al_historial(historial, &cantidad_historial, &p, &r, ORIGEN_MANUAL, 0, 0)) {
             printf(" Intento Nro %d guardado en el historial.\n", cantidad_historial);
         } else {
             printf(" [Aviso] Historial lleno (%d intentos): este intento no se guardo.\n", MAX_HISTORIAL);
@@ -97,12 +138,11 @@ int main(void)
                 break;
             case 6:
               limpiar_pantalla();
-                mostrar_historial(historial, cantidad_historial);
+                mostrar_historial(historial, cantidad_historial, ORIGEN_TODOS);
                 break;
             case 7:
                 limpiar_pantalla();
-                jugar_mision(historial, &cantidad_historial);
-                pausar_consola();
+                menu_mision(historial, &cantidad_historial);
                 break;
             case 0:
                 printf("\nFin de la simulacion.\n");
