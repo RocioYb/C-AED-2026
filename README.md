@@ -91,10 +91,3 @@ gcc main.c Artemis.c simulacion.c validaciones.c -o artemis -lm
 
 ---
 
-
-
-Aceptable: 70 puntos o más.
-
-Insuficiente: menos de 70 puntos.
-
-Historial: los resultados de las misiones se guardan para poder consultarlos posteriormente desde la opción «Ver resultados» del menú de misión.
