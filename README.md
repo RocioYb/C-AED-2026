@@ -81,9 +81,22 @@ Historial: los resultados de las misiones se guardan para poder consultarlos pos
 
 ##  Requisitos y Compilación
 
-Para compilar y ejecutar este proyecto desde la terminal, asegúrese de tener instalado un compilador de C (como MinGW).
+Para compilar y ejecutar este proyecto desde la terminal, asegúrese de tener instalado un compilador de C (como MinGW) y/o la herramienta `make`.
 
-### 1. Compilación y ejecución
+### 1. Compilación con Makefile
+Ubicado en la carpeta del proyecto (donde están `main.c` y el `Makefile`), ejecutar:
+```bash
+make
+```
+Esto compila `main.c`, `Artemis.c`, `simulacion.c` y `validaciones.c`, y genera el ejecutable `artemis`. En Windows con MinGW/MSYS2, si el comando `make` no está disponible, usar `mingw32-make`.
+
+### 2. Ejecución
+```bash
+./artemis
+```
+En Windows también puede ejecutarse como `artemis.exe`.
+
+### 3. Compilación y ejecución "Manual" -- Alternativa sin Make
 ```bash
 gcc main.c Artemis.c simulacion.c validaciones.c -o artemis -lm
 
