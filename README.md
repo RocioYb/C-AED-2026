@@ -67,3 +67,36 @@ gcc main.c Artemis.c simulacion.c validaciones.c -o artemis -lm
 
 ---
 
+Reglas del modo misión
+
+Objetivo: alcanzar una altitud de 160.000 metros durante la simulación.
+
+Tiempo máximo: completar el lanzamiento en un máximo de 120 segundos.
+
+Intentos disponibles: cada misión permite realizar hasta 3 intentos.
+
+Configuración del lanzamiento: el jugador debe ingresar los valores de aceleración de la primera fase (a1), el tiempo de desacople (t1) y la aceleración de la segunda fase (a2).
+
+Límite de aceleración: se debe respetar el máximo permitido de 3 g.
+
+Sistema de puntuación: cada intento se evalúa sobre un total de 100 puntos:
+
+40 puntos: por alcanzar la altitud objetivo.
+
+30 puntos: por respetar el límite de aceleración.
+
+30 puntos: por cumplir el tiempo establecido.
+
+Finalización anticipada: si el jugador obtiene 100 puntos, la misión se considera cumplida y finaliza automáticamente.
+
+Datos inválidos: las entradas incorrectas no consumen intentos.
+
+Clasificación del resultado:
+
+Excelente: 100 puntos.
+
+Aceptable: 70 puntos o más.
+
+Insuficiente: menos de 70 puntos.
+
+Historial: los resultados de las misiones se guardan para poder consultarlos posteriormente desde la opción «Ver resultados» del menú de misión.
