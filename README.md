@@ -55,18 +55,6 @@ Actividades en las que se utilizaron:
 
 Las sugerencias proporcionadas por estas herramientas fueron utilizadas como apoyo y revisadas por los integrantes del grupo durante el desarrollo del proyecto.
 
-##  Requisitos y Compilación
-
-Para compilar y ejecutar este proyecto desde la terminal, asegúrese de tener instalado un compilador de C (como MinGW).
-
-### 1. Compilación y ejecución
-```bash
-gcc main.c Artemis.c simulacion.c validaciones.c -o artemis -lm
-
-./artemis
-
----
-
 Reglas del modo misión
 
 Objetivo: alcanzar una altitud de 160.000 metros durante la simulación.
@@ -94,6 +82,27 @@ Datos inválidos: las entradas incorrectas no consumen intentos.
 Clasificación del resultado:
 
 Excelente: 100 puntos.
+
+Aceptable: 70 puntos o más.
+
+Insuficiente: menos de 70 puntos.
+
+Historial: los resultados de las misiones se guardan para poder consultarlos posteriormente desde la opción «Ver resultados» del menú de misión.
+
+
+##  Requisitos y Compilación
+
+Para compilar y ejecutar este proyecto desde la terminal, asegúrese de tener instalado un compilador de C (como MinGW).
+
+### 1. Compilación y ejecución
+```bash
+gcc main.c Artemis.c simulacion.c validaciones.c -o artemis -lm
+
+./artemis
+
+---
+
+
 
 Aceptable: 70 puntos o más.
 
