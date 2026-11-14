@@ -78,10 +78,6 @@ Insuficiente: menos de 70 puntos.
 
 Historial: los resultados de las misiones se guardan para poder consultarlos posteriormente desde la opción «Ver resultados» del menú de misión.
 
-## Diagrama del programa
-
-<img width="2122" height="1252" alt="diagrama_flujo_modo_mision_artemis (1) drawio" src="https://github.com/user-attachments/assets/e158aa18-1e1a-4d93-a41a-90c956a924f7" />
-
 
 ##  Requisitos y Compilación
 
