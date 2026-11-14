@@ -130,3 +130,38 @@ void mostrar_parametros(ParametrosD *p) {
 
     printf("=========================================\n");
 }
+
+/* Modo mision: pide un dato y lo repite solo ese dato hasta que
+   validar_parametros_fisicos acepte el conjunto de parametros. */
+static int pedir_dato_mision(const char *mensaje, double *dato, const ParametrosD *p) {
+
+    do {
+        if (!leer_double_seguro(mensaje, dato)) {
+            return 0;                       /* se cerro la entrada */
+        }
+    } while (!validar_parametros_fisicos(p));
+
+    return 1;
+}
+
+/* Modo mision: la mision fija v0, y0, h y g; el jugador elige solo a1, t1 y a2. */
+int cargar_parametros_mision(ParametrosD *p) {
+
+    if (p == NULL) {
+        return 0;
+    }
+
+    iniciar_parametros_por_defecto(p);
+
+    /* t1 provisorio: asi la altura de desacople no bloquea el ingreso de a1 */
+    p->t1 = 1.0;
+
+    printf("(Fijos: v0 = %.0f m/s, y0 = %.0f m, apagado a %.0f m, g = %.2f m/s2)\n",
+           p->v0, p->y0, p->h, p->g);
+
+    if (!pedir_dato_mision("Aceleracion fase 1 (m/s2): ", &p->a1, p)) return 0;
+    if (!pedir_dato_mision("Tiempo de desacople (s): ",   &p->t1, p)) return 0;
+    if (!pedir_dato_mision("Aceleracion fase 2 (m/s2): ", &p->a2, p)) return 0;
+
+    return 1;
+}

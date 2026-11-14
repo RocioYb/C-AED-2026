@@ -14,6 +14,7 @@ static void mostrar_menu(void)
     printf(" 4. Ver parametros actuales\n");
     printf(" 5. Ver resultados / reporte\n");
     printf(" 6. Ver historial de simulaciones\n");
+    printf(" 7. Modo mision\n");
     printf(" 0. Salir\n");
     printf("------------------------------------------\n");
 }
@@ -98,15 +99,16 @@ int main(void)
               limpiar_pantalla();
                 mostrar_historial(historial, cantidad_historial);
                 break;
-            case 0:
-
-                printf("\nFin de la simulacion.\n");
-
+            case 7:
+                limpiar_pantalla();
+                jugar_mision(historial, &cantidad_historial);
+                pausar_consola();
                 break;
-
+            case 0:
+                printf("\nFin de la simulacion.\n");
+                break;
             default:
-
-                printf("\nOpcion invalida. Ingrese un numero del 0 al 6.\n");
+                printf("\nOpcion invalida. Ingrese un numero del 0 al 7.\n");
                 pausar_consola();
         }
 

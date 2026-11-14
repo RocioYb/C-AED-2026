@@ -30,4 +30,8 @@ int agregar_al_historial(RegistroSimulacion historial[], int *cantidad,
                          const ParametrosD *p, const ResultadosSimulacion *r);
 void mostrar_historial(const RegistroSimulacion historial[], int cantidad);
 
+
+/* Modo mision : varios intentos, evaluacion y reporte final */
+void jugar_mision(RegistroSimulacion historial[], int *cantidad);
+
 #endif
